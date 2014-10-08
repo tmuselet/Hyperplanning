@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<title>Hyperplanning</title>
+		<meta charset="UTF-8">
+		<meta name="description" content="Hyperplanning">
+		<meta name="format-detection" content="telephone=no" />
+        <meta name="viewport" content="width=device-width,user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+		
+
+		<link href="ressources/stylesheets/appli.css" rel="stylesheet" media="screen">
+		<link href="ressources/css/ionic.min.css" rel="stylesheet" media="screen">
+		<link href="ressources/css/ionicons/ionicons.css" rel="stylesheet" media="screen">
+		<link href="ressources/css/bootstrap.min.css" rel="stylesheet" media="screen">
+
+		
+		<script type="text/javascript" src="cordova.js"></script>
+
+
+		<!-- LIBRAIRIES -->
+		<script src="libraries/ionic.bundle.min.js"></script>
+		<script src="libraries/angular-resource.min.js"></script>
+
+		
+		
+
+    	
+    	<script src="libraries/ical_parser.js"></script>
+    	
+    	<script src="libraries/angular-local-storage.min.js"></script>
+    	
+		<script src="app.js"></script>
+
+		<!-- SERVICES -->
+		<script src="services/constants/constantes.js"></script>
+
+
+		<!-- CONTROLLERS -->
+		<script src="controllers/appCtrl.js"></script>
+		<script src="controllers/homeCtrl.js"></script>		
+
+
+
+	</head>
+	<body ng-app="appMobile" ng-controller="appCtrl">
+		<ion-side-menus>
+	        <ion-side-menu-content drag-content="false">
+	            <ion-nav-bar  id="navBar" class="nav-title-slide-ios7 bar-dark bar-header principal b0" ng-click="scrollTop()">
+	            </ion-nav-bar>
+	            <ion-nav-view ></ion-nav-view>
+	        </ion-side-menu-content>
+	        <ion-side-menu side="left" >
+	            <ion-content class="hasheader">
+
+	            </ion-content>
+	        </ion-side-menu>
+
+	    </ion-side-menus>
+
+		<script type="text/javascript">
+			try {
+    			app.initialize();
+			}
+			catch(err) {
+    			//App est non definie
+			}
+	    </script>
+	</body>
+</html>

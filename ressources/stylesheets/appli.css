@@ -1,0 +1,28 @@
+/* line 14, ../sass/appli.scss */
+.home {
+  width: 100%;
+  height: 100%;
+  background-color: #5f89bc;
+}
+/* line 19, ../sass/appli.scss */
+.home .content {
+  margin-top: 20px;
+  padding-bottom: 20px;
+}
+/* line 23, ../sass/appli.scss */
+.home .content h3, .home .content h4, .home .content p, .home .content input, .home .content select {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+/* line 30, ../sass/appli.scss */
+.scroll {
+  background: #5f89bc;
+  height: 100%;
+  top: 0;
+}
+
+/* line 38, ../sass/appli.scss */
+h3 {
+  text-align: center;
+}

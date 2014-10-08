@@ -1,0 +1,41 @@
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+     -moz-border-radius: $radius;
+      -ms-border-radius: $radius;
+          border-radius: $radius;
+}
+
+
+$color_background: #5F89BC;
+
+
+
+.home
+{
+	width: 100%;
+	height:100%;
+	background-color:$color_background;
+	.content
+	{
+		margin-top:20px;
+		padding-bottom:20px;
+		h3, h4, p, input, select
+		{
+			margin-right:10px;
+			margin-left:10px;
+		}
+	}
+}
+
+.scroll{
+	background: $color_background;
+	height:100%;
+	top:0;
+}
+
+
+
+h3{
+	text-align:center;
+}
+
