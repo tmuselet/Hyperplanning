@@ -12,10 +12,32 @@ appControllers.controller('homeCtrl',['$scope', '$location', '$http', '$statePar
 	}
 	$scope.jours=["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"];
 
+	var today=new Date();
+	var day = today.getDate();
+	var month = today.getMonth()+1;
+	var year = today.getFullYear();
+
 	$scope.events = {};
 	$scope.events_parsed = [];
 	$scope.classeselect="";
-	$scope.semaineselect="";
+	if(month<10)
+	{
+		month="0"+month;
+	}
+	if(day<10)
+	{
+		day="0"+day;
+	}
+	$scope.dayselect=year+"-"+month+"-"+day;
+
+	$scope.setSemaine= function(semaine)
+	{	
+		var d = getWeekNumber(semaine);
+		$scope.semaineselect=d;
+	}
+
+
+	$scope.setSemaine($scope.dayselect);
 	$scope.courssemaine=[];
 	$scope.lundi=[];
 	$scope.mardi=[];
@@ -24,25 +46,11 @@ appControllers.controller('homeCtrl',['$scope', '$location', '$http', '$statePar
 	$scope.vendredi=[];
 	$scope.samedi=[];
 
-	$scope.isSemaineSelect = function(){
-		if($scope.semaineselect=="")
-		{
-			return false;
-		}
-		return true;
-	}
-	
-
 	$scope.setClasse= function(classe)
 	{
 		$scope.classeselect=classe;
 	}
 
-	$scope.setSemaine= function(semaine)
-	{
-		var d = getWeekNumber(semaine);
-		$scope.semaineselect=d;
-	}
 
     function getWeekNumber(d) 
     {
@@ -185,14 +193,15 @@ appControllers.controller('homeCtrl',['$scope', '$location', '$http', '$statePar
 	{
 
 		$scope.courssemaine=[];
-			$scope.lundi=[];
-	$scope.mardi=[];
-	$scope.mercredi=[];
-	$scope.jeudi=[];
-	$scope.vendredi=[];
-	$scope.samedi=[];
+		$scope.lundi=[];
+		$scope.mardi=[];
+		$scope.mercredi=[];
+		$scope.jeudi=[];
+		$scope.vendredi=[];
+		$scope.samedi=[];
 		if($scope.classeselect!="")
 		{
+			
 			var ical_file= "./ressources/ical/EdT_"+$scope.classeselect+".ics";
 			
 			//run ical parser on load
@@ -219,27 +228,30 @@ appControllers.controller('homeCtrl',['$scope', '$location', '$http', '$statePar
 	$scope.parsing = function(events){
 		$scope.events_parsed=[];
 		events.forEach(function(event){
-			event.DESCRIPTION = escape(event.DESCRIPTION);
-			var event_parsed = event.DESCRIPTION.split("%5Cn");
-			for(var i=0;i<event_parsed.length;i++)
+			
+			if(event.DESCRIPTION!=undefined)
 			{
-				event_parsed[i]=unescape(event_parsed[i]);
-			}
-		
-			for(var i=0;i<event_parsed.length;i++)
-			{
-				var sous_parse = event_parsed[i].split(" : ");
-				event_parsed[i] = [];
-				event_parsed[i].push(sous_parse);
-			}
+				event.DESCRIPTION = escape(event.DESCRIPTION);
+				var event_parsed = event.DESCRIPTION.split("%5Cn");
+				for(var i=0;i<event_parsed.length;i++)
+				{
+					event_parsed[i]=unescape(event_parsed[i]);
+				}
+			
+				for(var i=0;i<event_parsed.length;i++)
+				{
+					var sous_parse = event_parsed[i].split(" : ");
+					event_parsed[i] = [];
+					event_parsed[i].push(sous_parse);
+				}
+				event_parsed.day=event.day;
+				event_parsed.dtstart=event.dtstart;
+				event_parsed.start_time=event.start_time;
+				event_parsed.end_time=event.end_time;
+				event_parsed.start_date=event.start_date;
+				$scope.events_parsed.push(event_parsed);
 
-			event_parsed.day=event.day;
-			event_parsed.dtstart=event.dtstart;
-			event_parsed.start_time=event.start_time;
-			event_parsed.end_time=event.end_time;
-			event_parsed.start_date=event.start_date;
-
-			$scope.events_parsed.push(event_parsed);
+			}
 
 		});
 		
