@@ -21,7 +21,7 @@
       <div ng-show="isNotEmptyLundi()">
      
     <ul><h4>Lundi ({{lundi_date}}) :</h4>
-    <li  ng-repeat="event in lundi"><p><strong> {{event[0][0][1]}}</strong> - M.{{event[1][0][1]}}<br/>{{event.start_time}} - {{event.end_time}} </p>
+    <li  ng-repeat="event in lundi | orderBy : 'start_time'"><p><strong> {{event[0][0][1]}}</strong> - M.{{event[1][0][1]}}<br/>{{event.start_time}} - {{event.end_time}} </p>
     </li></ul>
       <hr>
     </div>
@@ -29,14 +29,14 @@
 
     <div ng-show="isNotEmptyMardi()">
     <ul><h4>Mardi ({{mardi_date}}) : </h4>
-    <li ng-repeat="event in mardi"><p><strong> {{event[0][0][1]}}</strong> - M.{{event[1][0][1]}}<br/>{{event.start_time}} - {{event.end_time}} </p>
+    <li ng-repeat="event in mardi | orderBy : 'start_time'"><p><strong> {{event[0][0][1]}}</strong> - M.{{event[1][0][1]}}<br/>{{event.start_time}} - {{event.end_time}} </p>
       </li></ul><hr>
 </div>
 
 <div ng-show="isNotEmptyMercredi()">
         
     <ul><h4>Mercredi ({{mercredi_date}}) :</h4>
-    <li  ng-repeat="event in mercredi"><p><strong> {{event[0][0][1]}}</strong> - M.{{event[1][0][1]}}<br/>{{event.start_time}} - {{event.end_time}}  </p>
+    <li  ng-repeat="event in mercredi | orderBy : 'start_time'"><p><strong> {{event[0][0][1]}}</strong> - M.{{event[1][0][1]}}<br/>{{event.start_time}} - {{event.end_time}}  </p>
       </li></ul><hr>
     </div>
 
@@ -45,7 +45,7 @@
     <div ng-show="isNotEmptyJeudi()">
         
       <ul><h4> Jeudi ({{jeudi_date}}) : </h4>
-    <li ng-repeat="event in jeudi"><p><strong> {{event[0][0][1]}}</strong> - M.{{event[1][0][1]}}<br/>{{event.start_time}} - {{event.end_time}} </p>
+    <li ng-repeat="event in jeudi | orderBy : 'start_time'"><p><strong> {{event[0][0][1]}}</strong> - M.{{event[1][0][1]}}<br/>{{event.start_time}} - {{event.end_time}} </p>
       </li></ul><hr>
     </div>
 
@@ -53,7 +53,7 @@
     <div ng-show="isNotEmptyVendredi()">
         
       <ul><h4> Vendredi ({{vendredi_date}}) :</h4>
-    <li ng-repeat="event in vendredi"><p><strong> {{event[0][0][1]}}</strong> - M.{{event[1][0][1]}}<br/>{{event.start_time}} - {{event.end_time}} </p>
+    <li ng-repeat="event in vendredi | orderBy : 'start_time'"><p><strong> {{event[0][0][1]}}</strong> - M.{{event[1][0][1]}}<br/>{{event.start_time}} - {{event.end_time}} </p>
       </li> </ul> <hr>
   </div>
 
@@ -61,9 +61,9 @@
 <div ng-show="isNotEmptySamedi()">
     
      <ul><h4>  Samedi ({{samedi_date}}) :</h4>
-    <li> ng-repeat="event in samedi"><p><strong> {{event[0][0][1]}}</strong> - M.{{event[1][0][1]}}<br/>{{event.start_time}} - {{event.end_time}} </p>
+    <li ng-repeat="event in samedi | orderBy : 'start_time'"><p><strong> {{event[0][0][1]}}</strong> - M.{{event[1][0][1]}}<br/>{{event.start_time}} - {{event.end_time}} </p>
       </li></ul><hr>
-    </diV>
+    </div>
 
 
 

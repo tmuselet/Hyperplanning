@@ -1,10 +1,12 @@
 'use strict';
 
 appControllers.controller('homeCtrl',['$scope', '$location', '$http', '$stateParams', 'localStorageService', '$ionicModal',function($scope, $location, $http, $stateParams, localStorageService, $ionicModal){
+	
+
 	$scope.nbLoad=1;
 	$scope.displayHome=false;
 	$scope.displayErreur=false;
-	$scope.promos=["L1-A","L1-B","L1-C","L2-A","L2-B","L3-A","L3-B","L4-GI","L4-GRM","L4-GSA","L5-GI","L5-GRM","L5-GSA"];
+	$scope.promos=["L1-A","L1-B","L2-A","L2-B","L3-A","L3-B","L4-GI","L4-GRM","L4-GSA","L5-GI","L5-GRM","L5-GSA"];
 	$scope.semaines=[];
 	for(var i=0;i<=51;i++)
 	{
@@ -17,7 +19,7 @@ appControllers.controller('homeCtrl',['$scope', '$location', '$http', '$statePar
 	var month = today.getMonth()+1;
 	var year = today.getFullYear();
 
-	$scope.events = {};
+	$scope.events = [];
 	$scope.events_parsed = [];
 	$scope.classeselect="";
 	if(month<10)
@@ -30,6 +32,7 @@ appControllers.controller('homeCtrl',['$scope', '$location', '$http', '$statePar
 	}
 	$scope.dayselect=year+"-"+month+"-"+day;
 
+	
 	$scope.setSemaine= function(semaine)
 	{	
 		var d = getWeekNumber(semaine);
@@ -38,7 +41,6 @@ appControllers.controller('homeCtrl',['$scope', '$location', '$http', '$statePar
 
 
 	$scope.setSemaine($scope.dayselect);
-	$scope.courssemaine=[];
 	$scope.lundi=[];
 	$scope.mardi=[];
 	$scope.mercredi=[];
@@ -82,40 +84,57 @@ appControllers.controller('homeCtrl',['$scope', '$location', '$http', '$statePar
 
 			if(weekNo==$scope.semaineselect)
 			{
-				$scope.courssemaine.push(event);
-				
+					
 				var from = event.start_date.split("/");
 		    	var f = new Date(from[2], from[1] - 1, from[0]);
 		    	
 				if(f.getDay()==1)
 				{
-					$scope.lundi.push(event);
-					$scope.lundi_date=event.start_date;
+					if(event[2]!=undefined)
+					{
+						$scope.lundi.push(event);
+						$scope.lundi_date=event.start_date;
+					}
 				}
 				if(f.getDay()==2)
 				{
-					$scope.mardi.push(event);
-					$scope.mardi_date=event.start_date;
+					if(event[2]!=undefined)
+					{
+						$scope.mardi.push(event);
+						$scope.mardi_date=event.start_date;
+					}
 				}
 				if(f.getDay()==3)
 				{
-					$scope.mercredi.push(event);
-					$scope.mercredi_date=event.start_date;
+					if(event[2]!=undefined)
+					{
+						$scope.mercredi.push(event);
+						$scope.mercredi_date=event.start_date;
+					}
 				}
 				if(f.getDay()==4)
 				{
-					$scope.jeudi.push(event);
-					$scope.jeudi_date=event.start_date;
+					if(event[2]!=undefined)
+					{
+						$scope.jeudi.push(event);
+						$scope.jeudi_date=event.start_date;
+					}
 				}
 				if(f.getDay()==5)
 				{
-					$scope.vendredi.push(event);
-					$scope.vendredi_date=event.start_date;
+					if(event[2]!=undefined)
+					{
+						$scope.vendredi.push(event);
+						$scope.vendredi_date=event.start_date;
+					}
 				}
 				if(f.getDay()==6)
 				{
-					$scope.samedi.push(event);
-					$scope.samedi_date=event.start_date;
+					if(event[2]!=undefined)
+					{
+						$scope.samedi.push(event);
+						$scope.samedi_date=event.start_date;
+					}
 				}
 				
 			}
@@ -189,10 +208,9 @@ appControllers.controller('homeCtrl',['$scope', '$location', '$http', '$statePar
 		else {return false};
 	}
 
+
 	$scope.init_calendar = function() 
 	{
-
-		$scope.courssemaine=[];
 		$scope.lundi=[];
 		$scope.mardi=[];
 		$scope.mercredi=[];
@@ -202,25 +220,22 @@ appControllers.controller('homeCtrl',['$scope', '$location', '$http', '$statePar
 		if($scope.classeselect!="")
 		{
 			
-			var ical_file= "./ressources/ical/EdT_"+$scope.classeselect+".ics";
-			
-			//run ical parser on load
-				//Create new ical parser
-			new ical_parser(ical_file, function(cal){
-				//When ical parser has loaded file
-				//get future events
-				$scope.events = cal.getEvents();
+			$http.get("http://tanguymuselet.fr/WS-Hyperplanning/get"+$scope.classeselect+".php").
+			success(function(edt){
+				var ical_file=edt;
+				$scope.parseICAL(ical_file);
 				
-				//And display them
 				$scope.parsing($scope.events);
+				
 				$scope.events_parsed.forEach(function(event){
 					$scope.isinweek(event);
 				});
 				
-				$scope.$apply();
 
 			});	
+
 		}
+		
 				
 
 	}
@@ -228,7 +243,6 @@ appControllers.controller('homeCtrl',['$scope', '$location', '$http', '$statePar
 	$scope.parsing = function(events){
 		$scope.events_parsed=[];
 		events.forEach(function(event){
-			
 			if(event.DESCRIPTION!=undefined)
 			{
 				event.DESCRIPTION = escape(event.DESCRIPTION);
@@ -265,6 +279,99 @@ appControllers.controller('homeCtrl',['$scope', '$location', '$http', '$statePar
 		$scope.displayHome=true;
 		}
 	}
+
+	$scope.makeDate = function(ical_date){
+		//break date apart
+		var dt =  {
+			year: ical_date.substr(0,4),
+			month: ical_date.substr(4,2),
+			day: ical_date.substr(6,2),
+			hour: ical_date.substr(9,2),
+			minute: ical_date.substr(11,2)
+		}
+		//Create JS date (months start at 0 in JS - don't ask)
+		dt.date = new Date(dt.year, (dt.month-1), dt.day, dt.hour, dt.minute);
+		//Get the full name of the given day
+		dt.dayname =["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][dt.date.getDay()];
+		
+		return dt;
+	}
+	
+
+	$scope.parseICAL = function(data){
+		//Ensure cal is empty
+		var ln;
+		var idx;
+		var type;
+		var val;
+		var dt;
+		//Clean string and split the file so we can handle it (line by line)
+		var cal_array = data.replace(new RegExp( "\\r", "g" ), "").split("\n");
+		
+		//Keep track of when we are activly parsing an event
+		var in_event = false;
+		//Use as a holder for the current event being proccessed.
+		var cur_event = null;
+		for(var i=0;i<cal_array.length;i++){
+			ln = cal_array[i];
+			//If we encounted a new Event, create a blank event object + set in event options.
+			if(!in_event && ln == 'BEGIN:VEVENT'){
+				in_event = true;
+				cur_event = {};
+			}
+			//If we encounter end event, complete the object and add it to our events array then clear it for reuse.
+			if(in_event && ln == 'END:VEVENT'){
+				in_event = false;
+				$scope.events.push(cur_event);
+				cur_event = null;
+			}
+			//If we are in an event
+			if(in_event){
+				//Split the item based on the first ":"
+				idx = ln.indexOf(':');
+				//Apply trimming to values to reduce risks of badly formatted ical files.
+				type = ln.substr(0,idx).replace(/^\s\s*/, '').replace(/\s\s*$/, '');//Trim
+				val = ln.substr(idx+1,ln.length-(idx+1)).replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+				if(type=="DESCRIPTION;LANGUAGE=fr")
+				{
+					type="DESCRIPTION";
+				}
+				if(type=="DTSTART;VALUE=DATE")
+				{
+					type="DTSTART";
+				}
+				if(type=="DTEND;VALUE=DATE")
+				{
+					type="DTEND";
+				}
+
+				//If the type is a start date, proccess it and store details
+				if(type =='DTSTART'){
+					dt = $scope.makeDate(val);
+					val = dt.date;
+					//These are helpful for display
+					cur_event.start_time = dt.hour+':'+dt.minute;
+					cur_event.start_date = dt.day+'/'+dt.month+'/'+dt.year;
+					cur_event.day = dt.dayname;
+				}
+				//If the type is an end date, do the same as above
+				if(type =='DTEND'){
+					dt = $scope.makeDate(val);
+					val = dt.date;
+					//These are helpful for display
+					cur_event.end_time = dt.hour+':'+dt.minute;
+					cur_event.end_date = dt.day+'/'+dt.month+'/'+dt.year;
+					cur_event.day = dt.dayname;
+				}
+				//Convert timestamp
+				if(type =='DTSTAMP') val = $scope.makeDate(val).date;
+				
+				//Add the value to our event object.
+				cur_event[type] = val;
+			}
+		}
+	}
+
 
 
 	$scope.init_calendar();
